@@ -3,11 +3,10 @@
 Investigate potential difference between new and repeated clients.
 
 ## Content of the project
-* 1. data directory
-* 2. `explore_data` directory: implement class for data transformation and plotting
-* 3. `app.py`
-* 4. `requirements.txt`
-* 5. `.ipynb`: template notebooks #TODO: update
+* 1. `explore_data` directory: implement class for data transformation and plotting
+* 2. `app.py`
+* 3. `requirements.txt`
+* 4. `.ipynb`: template notebooks #TODO: update
 
 ## For running the analysis in designated environment
 * clone repo locally
