@@ -121,22 +121,3 @@ if nav == 'Heat Maps':
         zoom=11,
         pitch=50
     )
-
-    # map = pdk.Deck(
-    #     layers=[layer],
-    #     initial_view_state=view_state,
-    # )
-   
-    # st.pydeck_chart(map)
-
-    # st.markdown(
-    # ''' ##### For heat map per LOR, please select from one of the following options.
-    # '''
-    # )
-    
-    
-    # #district = st.selectbox('Please select which district you are interested in', bike_thefts_transformed['LOR'].unique())
-
-    # if st.button("End"):
-    #     st.success(f'Thank you for your interest and for stopping by.')
-
