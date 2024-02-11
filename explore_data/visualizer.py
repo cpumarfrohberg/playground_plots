@@ -6,15 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.metrics import (roc_curve, auc)
-
 import statsmodels.api as sm
 #import pymc3 as pm
 import scipy.stats as stats
 #from pandas.plotting import _matplotlib
 
-class UstVisualizer:
-    '''Visualize different aspects of ust data.'''
+class Visualizer:
+    '''Visualize different aspects of  data.'''
     def __init__(self, data: pd.DataFrame) -> None:
         self.data = data
     
@@ -48,17 +46,13 @@ class UstVisualizer:
         else:
             numeric = self.data[columns]
 
-        # Calculate the number of rows and columns for the facet grid
-        num_cols = 3  # You can adjust the number of columns as needed
+        num_cols = 3
         num_rows = int(np.ceil(len(numeric.columns) / num_cols))
 
-        # Create subplots with the specified figsize
         fig, axes = plt.subplots(nrows=num_rows, ncols=num_cols, figsize=figsize)
 
-        # Flatten the axes array
         axes = axes.flatten()
 
-        # Iterate over the columns and plot each one individually
         for i, ax in enumerate(axes):
             if i < len(numeric.columns):
                 col_name = numeric.columns[i]
@@ -67,13 +61,11 @@ class UstVisualizer:
                 ax.set_xlabel('')  # Remove x-label for clarity
                 if y_max is not None:
                     ax.set_ylim(0, y_max)
-
-        # Remove any unused axes
+                    
         for ax in axes[len(numeric.columns):]:
             ax.remove()
 
         plt.tight_layout()
-        #return fig
 
     def pairplot(self, y_max=None, **kwargs) -> sns.PairGrid:
         '''
@@ -114,6 +106,19 @@ class UstVisualizer:
         )
         plt.title('Correlation')
         plt.tight_layout()
+        plt.show()
+
+    def qq_plot(self, column: pd.Series, **kwargs):
+        '''
+        Generate a Quantile-Quantile (Q-Q) plot for a selected column.
+        @Params:
+            - column: The column to visualize.
+            - kwargs: Additional keyword args to pass down to plotting function.
+        '''
+        sm.qqplot(column, line='s', **kwargs)
+        plt.xlabel('Theoretical Quantiles')
+        plt.ylabel('Sample Quantiles')
+        plt.title(f'Q-Q Plot for {column.name}')
         plt.show()
 
     def distribution_col(self, column: pd.Series, y_max=None, **kwargs) -> sns.displot:
@@ -157,72 +162,27 @@ class UstVisualizer:
                 ax.set_ylim(0, y_max)
         return g
     
-    def qq_plot(self, column: pd.Series, **kwargs):
-        '''
-        Generate a Quantile-Quantile (Q-Q) plot for a selected column.
-        @Params:
-            - column: The column to visualize.
-            - kwargs: Additional keyword args to pass down to plotting function.
-        '''
-        # Create a Q-Q plot using statsmodels
-        sm.qqplot(column, line='s', **kwargs)
+    # def qq_plot_custom_distribution(self, data_column: pd.Series, pymc3_distribution, **kwargs):
+    #     '''
+    #     Generate a Q-Q plot for a specified PyMC3 distribution.
+    #     @Params:
+    #         - data_column: The column of your data to visualize.
+    #         - pymc3_distribution: A PyMC3 distribution object representing the chosen distribution.
+    #         - kwargs: Additional keyword args to pass to the plt.scatter function.
+    #     '''
+    #     with pm.Model() as model:
+    #         # Create a custom random variable using the PyMC3 distribution
+    #         rv = pymc3_distribution('rv', **kwargs)
+    #         likelihood = pm.Normal('likelihood', mu=rv, sd=1, observed=data_column)
         
-        # Add labels and title
-        plt.xlabel('Theoretical Quantiles')
-        plt.ylabel('Sample Quantiles')
-        plt.title(f'Q-Q Plot for {column.name}')
+    #     with model:
+    #         trace = pm.sample(1000, tune=1000)
         
-        plt.show()
-
-    def qq_plot_custom_distribution(self, data_column: pd.Series, pymc3_distribution, **kwargs):
-        '''
-        Generate a Q-Q plot for a specified PyMC3 distribution.
-        @Params:
-            - data_column: The column of your data to visualize.
-            - pymc3_distribution: A PyMC3 distribution object representing the chosen distribution.
-            - kwargs: Additional keyword args to pass to the plt.scatter function.
-        '''
-        with pm.Model() as model:
-            # Create a custom random variable using the PyMC3 distribution
-            rv = pymc3_distribution('rv', **kwargs)
-            likelihood = pm.Normal('likelihood', mu=rv, sd=1, observed=data_column)
+    #     # Extract posterior samples
+    #     samples = trace['rv']
         
-        with model:
-            trace = pm.sample(1000, tune=1000)
-        
-        # Extract posterior samples
-        samples = trace['rv']
-        
-        # Generate Q-Q plot
-        stats.probplot(samples, dist=stats.norm, plot=plt)
-        plt.title(f'Q-Q Plot for {pymc3_distribution.__name__} Distribution')
-        plt.show()
-
-    def plot_roc_curves(self, X_val: pd.DataFrame, y_val: pd.Series, classifiers: dict, target_names: list) -> None:
-        '''Plot ROC curves for multiple classifiers.
-        @Params:
-            - X_val: validation set.
-            - y_val: labels of validation set.
-            - classifiers: a dictionary of classifiers as {classifier_name: classifier_instance}.
-            - target_names: list of target class names.
-        '''
-        if self.fitted_model is None:
-            raise ValueError("The model has not been fitted. Call 'fit_model' first.")
-
-        fig, ax = plt.subplots()
-
-        for classifier_name, classifier_instance in classifiers.items():
-            fpr, tpr, _ = roc_curve(y_val, classifier_instance.predict_proba(X_val)[:, 1])
-            roc_auc = auc(fpr, tpr)
-            plt.plot(fpr, tpr, label=f'{classifier_name} (AUC = {roc_auc:.2f})', alpha=0.8)
-
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Receiver Operating Characteristic (ROC) Curve')
-        plt.legend(loc='lower right')
-
-        # Show the plot
-        plt.show()
+    #     # Generate Q-Q plot
+    #     stats.probplot(samples, dist=stats.norm, plot=plt)
+    #     plt.title(f'Q-Q Plot for {pymc3_distribution.__name__} Distribution')
+    #     plt.show()
     

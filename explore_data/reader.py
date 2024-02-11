@@ -3,67 +3,36 @@
 import os
 import pandas as pd
 import numpy as np
-import snowflake
 
-from sklearn.model_selection import GridSearchCV
+PATH = '~/data/maynas'
 
-#from explore_data.utils import PATH
-
-PATH = '~/projects/data/score_providers/boniversum'
-
-class BoniversumReader:
+class Reader:
     '''Read, rename and drop cols.'''
 
     def __init__(self, path = PATH):
         self.path = path
-    
-    def get_data_from_snowflake(self, query:str)->pd.DataFrame:
-        '''Extract internal data.'''
-        con = snowflake.connector.connect(
-        user=os.environ['DWH_USER_SNOWFLAKE'],
-        password=os.environ['DWH_PASSWORD_SNOWFLAKE'],
-        authenticator='externalbrowser',
-        account=os.environ['DWH_ACCOUNT_SNOWFLAKE']
-        )
-        cur = con.cursor()
-        try:
-            cur.execute(query)
 
-            names = [ x[0].lower() for x in cur.description]
-            rows = cur.fetchall()
-            df = pd.DataFrame( rows, columns=names)
-        finally:
-            cur.close()
+    def read_data(self, file: str) -> pd.DataFrame: #TODO: include drop cols option
+        '''Return DataFrame with feature matrix and labels as values.'''
+        df = pd.read_csv(f'{self.path}/{file}.csv', index_col=0, parse_dates=True, encoding = 'unicode_escape')
+        return df
+
+    def include_timestamps(self, df: pd.DataFrame) -> pd.DataFrame:
+        '''Return DataFrame with time-stamps.'''
+        df['hour'] = df.index.hour
+        df['day'] = df.index.day
+        df['week_day'] = df.index.weekday
+        df['week'] = df.index.week
+        df['year'] = df.index.year
+        df['month'] = df.index.month
+        return df
+
+    def time_parser(self, df: pd.DataFrame, time_parsables: list) -> pd.DataFrame:
+        '''Parse columns encoded as strings to datetime-objects.'''
+        for col in time_parsables:
+            df[col] = pd.to_datetime(df[col])
         return df
     
-    def write_data_artefacts(self, data_to_write:pd.DataFrame, data_artefact_name:str)->None:
-        '''Write data artefacts.
-        @Params:
-            - data_to_write: name of pd.DataFrame to be saved
-            - data_artefact_name: name of data artefact saveable
-        @Returns:
-            - None
-        '''
-        data_to_write.to_csv(f'{self.path}/{data_artefact_name}.csv')
-    
-    def write_best_params(self, grid_search_object:None, grid_search_artefact_name:str)->None:
-        '''Write data artefacts.
-        @Params:
-            - data_to_write: name of pd.DataFrame to be saved
-            - data_artefact_name: name of data artefact saveable
-        @Returns:
-            - None
-        '''
-        best_params = grid_search_object.best_params_
-        best_params_df = pd.DataFrame([best_params]).T
-        best_params_df.columns = ['Best Parameters']
-        best_params_df.to_csv(f'{grid_search_artefact_name}.csv', index=True)
-
-    def create_overview_scores(self, list_scores_tables: list)->pd.DataFrame:
-        '''Return concatenated DataFrame including overview of performance scores.'''
-        frames_concatenable = list()
-        for score_summary in list_scores_tables:
-            individual_summary = score_summary.iloc[0, 1:]
-            individual_summary = individual_summary.to_frame()
-            frames_concatenable.append(individual_summary)
-        return frames_concatenable
+    def save_intermediate_data(self, df: pd.DataFrame, file: str):
+        '''Save extracted data locally as csv-file.'''
+        return df.to_csv(f'{self.path}/{file}.csv')

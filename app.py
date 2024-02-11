@@ -1,96 +1,99 @@
 #app.py
-
-from utils import BikeThefts, AggregateThefts
+#TODO: modify data => change col names and drop unnecessary ones
+from explore_data.visualizer import Visualizer
+from explore_data.reader import Reader
 import time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
-import pydeck as pdk
 
-CATS = ['bike_type', 'delict', 'description', 'intent_delict']
+CATS = [
+    'Resident_Iquitos', 'Client_Sex', 'Client_Married', 'Client_Status_Post3Months', 
+    'LO_Active_Employee_Post3Months', 'LO_Active_Employee_Prior3Months', 
+    'LO_Active_Employee_Prior6Months', 'LO_Changed'
+    ]
 
-bike_thefts = BikeThefts()
-aggregated_bike_thefts = AggregateThefts()
+viz = Visualizer()
+reader = Reader()
 
 @st.cache_data
 def load_data():
-    bike_thefts_data = bike_thefts.read_data('Fahrraddiebstahl')
-    bike_thefts_transformed = bike_thefts.read_data('bike_thefts_transformed')
-    return bike_thefts_data, bike_thefts_transformed
+    '''Read raw data and return DataFrame(s).'''
+    lo_client_relation = Reader.read_data('Fahrraddiebstahl')
+    churn_data = Reader.read_data('churn_data')
+    return lo_client_relation, churn_data
 
-bike_thefts_data, bike_thefts_transformed = load_data()
+lo_client_relation, churn_data = load_data()
 
-st.title('Bike Thefts in Berlin')
+st.title('Visual Analyis')
 
 nav = st.sidebar.radio(
     'Please chose one of the following:',
-    ['Home', 'Categorical Variables', 'Numeric Variables', 'Time Series', 'Heat Maps']
+    ['Home', 'Categorical Variables', 'Numeric Variables', 'Time Series', 'Heat Maps'] #TODO: adapt
     ) 
 
 if nav == 'Home':
     st.markdown(
-    ''' ## Welcome to the Bike Thefts in Berlin page.
-    ##### Its main objective is to analyze bike thefts in Berlin during the time period 2022-2023.
+    ''' ## This is an example on how to visualize tabular data and on how to make initial inferences.
     '''
     )
   
-    if st.checkbox('<- If you are interested to see the initial data made available by \
-                    the Police Department in Berlin, click here'):
-            st.table(bike_thefts_data)
-
-    if st.checkbox('<- For checking the transformed data, click here'):
-            st.table(bike_thefts_transformed)
+    if st.checkbox('<- For a first scan of data related to the relationship between Loan Officers and \
+                   clients, click here'):
+            st.table(lo_client_relation)
+    
+    if st.checkbox('<- For a first scan of data on customer churn, click here'):
+            st.table(churn_data)
 
 if nav == 'Categorical Variables':
-    st.write('Welcome to the section on Categorical Variables.')
-    if st.checkbox('<- Click here for plots on categorical variables'):
+    st.write('Plot and make initial inference on categorical variables.')
+    if st.checkbox('<- Click here for example plots of categorical variables'): #TODO: implement as method
         fillable_plots = list()
         for cat in CATS:
             fig, ax = plt.subplots(figsize = (5,3))
             fig = sns.catplot(
-                    data=bike_thefts_transformed, y= cat, kind='count',
-                    palette='pastel', edgecolor='.6'
+                    data=churn_data, #TODO: check dataset name
+                    y= cat, 
+                    kind='count', 
+                    alpha = 0.5, 
+                    edgecolor='.6'
             )
             fillable_plots.append(fig)
         for plot in fillable_plots:
            time.sleep(3)
-           st.pyplot(plot) 
+           st.pyplot(plot)
     
 if nav == 'Numeric Variables':
-    st.write('Welcome to the section on Numeric Variables.')
-    if st.checkbox('<- Click here for checking a box plot'):
-        multi_biketype_month = bike_thefts_transformed.groupby(['bike_type', 'year'])['damage_amount'].mean()
-        multi_biketype_month = multi_biketype_month.unstack().round(2)
-        multi_biketype_month = multi_biketype_month.reset_index()
-        multi_biketype_month_long = multi_biketype_month.melt(id_vars='bike_type', var_name='year', value_name='bike_thefts')
-        fig, ax = plt.subplots(figsize = (5,3))
-        sns.boxplot(x='year', y='bike_thefts', data=multi_biketype_month_long)
-        st.pyplot(fig)
+    st.write('Plot and make initial inference on numeric variables.')
+    if st.checkbox('<- Click here for inspecting box plots'):
+        boxplots = viz.boxplot(columns=lo_client_relation.columns, y_max=None) #TODO: check dataset name
+        try:
+            st.pyplot(boxplots)
+        except: 'StreamlitMethodError'
 
-    if st.checkbox('<- Click here for seeing the mean damage amount district'):
-        mean_damage_by_district = aggregated_bike_thefts.mean_vals(bike_thefts_transformed, 'district', 'damage_amount')
-        mean_damage_by_district = round(mean_damage_by_district, 0)
-        mean_damage_by_district.set_index('district', inplace = True)
-        st.bar_chart(mean_damage_by_district)
+    if st.checkbox('<- Click here for checking pairplots and scatterplots'):
+        pairplot = viz.pairplot()
+        try:
+            st.pyplot(pairplot());
+        except: 'StreamlitMethodError'
     
-    if st.checkbox('<- Click here for seeing the number of bike thefts by district'):
-        thefts_by_district = aggregated_bike_thefts.aggregate_thefts(bike_thefts_transformed, 'district')
-        thefts_by_district.rename(columns={0:'number_bike_thefts'}, inplace=True)
-        thefts_by_district.set_index('district', inplace=True)
-        thefts_by_district.sort_values(by = 'number_bike_thefts', ascending=False, inplace=True)
-        st.bar_chart(thefts_by_district)
+    if st.checkbox('<- Click here for checking QQplots (assumption: vars are normally distributed)'):
+        qqplot = viz.qq_plot()
+        try:
+            st.pyplot(qqplot);
+        except: 'StreamlitMethodError'
 
-if nav == 'Time Series':
-    st.write('Welcome to the section on Time Series.')
+if nav == 'Plot thru time':
+    st.write('Welcome to the section on time series.')
 
     if st.checkbox('<- Click here to see the daily values of bike thefts.'):
-        bike_theft_series = bike_thefts_transformed.loc['2022-01-02':'2023-02-19'].resample('D').size()
+        bike_theft_series = churn_data.loc['2022-01-02':'2023-02-19'].resample('D').size()
         st.line_chart(bike_theft_series) 
     
     if st.checkbox('<- Click here to see the weekly values of bike thefts.'):
-        bike_theft_series = bike_thefts_transformed.loc['2022-01-02':'2023-02-19'].resample('W').size()
+        bike_theft_series = churn_data.loc['2022-01-02':'2023-02-19'].resample('W').size()
         st.line_chart(bike_theft_series) 
 
 if nav == 'Heat Maps':
@@ -100,24 +103,7 @@ if nav == 'Heat Maps':
     )
       
     if st.checkbox('Click here to see the how variables are correlated with each other (pearson).'):
-        corr = bike_thefts_transformed.corr()
+        corr = churn_data.corr()
         fig, ax = plt.subplots()
         sns.heatmap(corr, ax=ax)
         st.write(fig)
-    
-   
-    if st.checkbox('Click here to see geodata being plotted.'):
-        layer = pdk.Layer(
-        'ScatterplotLayer',
-        data=bike_thefts_transformed,
-        get_position='[lon, lat]',
-        get_color='[200, 30, 0, 160]',
-        get_radius=1000,
-    )
-
-    view_state = pdk.ViewState(
-        longitude=13.4,
-        latitude=52.5,
-        zoom=11,
-        pitch=50
-    )
