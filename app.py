@@ -72,13 +72,13 @@ if nav == 'Numeric Variables':
     if st.checkbox('<- Click here for checking pairplots and scatterplots'):
         pairplot = car_viz.pairplot()
         try:
-            st.pyplot(pairplot())
+            st.write(pairplot())
         except Exception as e:
             st.error('An error occurred: {}'.format(e))
 
     if st.checkbox('<- Click here for checking QQplots (assumption: vars are normally distributed)'):
         qqplot = car_viz.qq_plot()
         try:
-            st.pyplot(qqplot())
+            st.write(qqplot())
         except Exception as e:
             st.error('An error occurred: {}'.format(e))
