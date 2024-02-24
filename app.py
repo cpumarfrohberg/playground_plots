@@ -61,25 +61,24 @@ if nav == 'Numeric Variables':
         - numeric variables are normally distributed
     '''
     st.markdown(multi)
-    
-    if False:
-        # if st.checkbox("<- Let's check box plots:"):
-        #     boxplots = viz.boxplot(columns=lo_client_relation.columns, y_max=None) #TODO: check dataset name
-        #     try:
-        #         st.pyplot(boxplots)
-        #     except Exception as e:  # Ensure there's at least one statement inside the except block
-        #         st.error('An error occurred: {}'.format(e))
 
-        # if st.checkbox('<- Click here for checking pairplots and scatterplots'):
-        #     pairplot = viz.pairplot()
-        #     try:
-        #         st.pyplot(pairplot())
-        #     except Exception as e:
-        #         st.error('An error occurred: {}'.format(e))
-        
-        # if st.checkbox('<- Click here for checking QQplots (assumption: vars are normally distributed)'):
-        #     qqplot = viz.qq_plot()
-        #     try:
-        #         st.pyplot(qqplot())
-        #     except Exception as e:
-        #         st.error('An error occurred: {}'.format(e))
+    if st.checkbox("<- Let's check box plots:"):
+        boxplots = car_viz.boxplot(columns=numeric, y_max=None)
+        try:
+            st.pyplot(boxplots)
+        except Exception as e:
+            st.error('An error occurred: {}'.format(e))
+
+    if st.checkbox('<- Click here for checking pairplots and scatterplots'):
+        pairplot = car_viz.pairplot()
+        try:
+            st.pyplot(pairplot())
+        except Exception as e:
+            st.error('An error occurred: {}'.format(e))
+
+    if st.checkbox('<- Click here for checking QQplots (assumption: vars are normally distributed)'):
+        qqplot = car_viz.qq_plot()
+        try:
+            st.pyplot(qqplot())
+        except Exception as e:
+            st.error('An error occurred: {}'.format(e))
