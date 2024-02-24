@@ -50,25 +50,6 @@ if nav == 'Home':
     all other ones are numeric data. Of these latter, `mpg`, `disp`, `drat`, `wt`  
     and `qsec` are continuous. The rest are integer variables.'''
     st.markdown(multi)
-
-if False:
-# if nav == 'Categorical Variables':
-#     st.write('Plot and make initial inference on categorical variables.')
-#     if st.checkbox('<- Click here for example plots of categorical variables'): #TODO: implement as method
-#         fillable_plots = list()
-#         for cat in CATS:
-#             fig, ax = plt.subplots(figsize = (5,3))
-#             fig = sns.catplot(
-#                     data=churn_data, #TODO: check dataset name
-#                     y= cat, 
-#                     kind='count', 
-#                     alpha = 0.5, 
-#                     edgecolor='.6'
-#             )
-#             fillable_plots.append(fig)
-#         for plot in fillable_plots:
-#            time.sleep(3)
-#            st.pyplot(plot)
     
 if nav == 'Numeric Variables':
     st.write('Create plots for inspecting numeric variables.')
@@ -98,3 +79,23 @@ if nav == 'Numeric Variables':
     #     try:
     #         st.pyplot(qqplot);
     #     except: 'StreamlitMethodError'
+
+
+    if False:
+    # if nav == 'Categorical Variables':
+    #     st.write('Plot and make initial inference on categorical variables.')
+    #     if st.checkbox('<- Click here for example plots of categorical variables'): #TODO: implement as method
+    #         fillable_plots = list()
+    #         for cat in CATS:
+    #             fig, ax = plt.subplots(figsize = (5,3))
+    #             fig = sns.catplot(
+    #                     data=churn_data, #TODO: check dataset name
+    #                     y= cat, 
+    #                     kind='count', 
+    #                     alpha = 0.5, 
+    #                     edgecolor='.6'
+    #             )
+    #             fillable_plots.append(fig)
+    #         for plot in fillable_plots:
+    #            time.sleep(3)
+    #            st.pyplot(plot)
