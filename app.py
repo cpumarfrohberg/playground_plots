@@ -40,8 +40,7 @@ nav = st.sidebar.radio(
 
 if nav == 'Home':
     if st.checkbox('<- For a first scan of the cars data, click here'):
-            cars_info = cars.info()
-            st.write(cars_info)
+            st.write(cars.info())
 
     multi = '''We see that only one variable is categorical/nominal ("model"),  
     all other ones are numeric data. Of these latter, `mpg`, `disp`, `drat`, `wt`  
