@@ -81,7 +81,7 @@ if nav == 'Numeric Variables':
     #     except: 'StreamlitMethodError'
 
 
-    if False:
+        if False:
     # if nav == 'Categorical Variables':
     #     st.write('Plot and make initial inference on categorical variables.')
     #     if st.checkbox('<- Click here for example plots of categorical variables'): #TODO: implement as method
