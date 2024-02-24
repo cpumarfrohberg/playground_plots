@@ -29,17 +29,16 @@ numeric = cars.select_dtypes(include=['int64', 'float64'])
 
 st.title('Example Visual Analyis')
 
-st.markdown(
-    ''' #### This is an example on how to visualize tabular data and on how to make initial inferences.
-    '''
-    )
-
 nav = st.sidebar.radio(
     'Please chose one of the following:',
-    ['Home', 'Categorical Variables', 'Numeric Variables']
+    ['Home', 'Numeric Variables', 'Categorical Variables']
     ) 
 
 if nav == 'Home':
+    st.markdown(
+    ''' #### This is an example on how to visualize tabular data and on how to make initial inferences.
+    '''
+    )
     if st.checkbox('<- For a first scan of the cars data, click here'):
         buffer = StringIO()
         cars.info(buf=buffer)
@@ -55,11 +54,23 @@ if nav == 'Numeric Variables':
     if st.checkbox('<- Click here for inspecting summary stats'):
         st.table(cars.describe())
     
-    multi = '''We could make first hypotheses about the distribution of our data.  
-    * First working hypothesis:
-        - numeric variables are normally distributed
+    first_working_hypo = '''* First working hypothesis: **variables are normally distributed**. However:
+    - comparing mean and median vals, we note that this might not be the case (e.g. `disp`,  
+    but also `hp`...and other ones - can you spot which ones?)
+    - in fact, by comparing mean and median vals, we can actually already say that either  
+    the data-generating processes (DGP) are non-uniform or that we have outliers.
+    - in addition, and by comparing the first and third quartiles with the median, we can  
+    check if our vars are left (`disp`) or right-skewed (e.g. `hp`)
+    - **we will use plots in order to see if our hypotheses could are true**
     '''
-    st.markdown(multi)
+    st.markdown(first_working_hypo)
+    
+    second_working_hypo = '''* Second working hypothesis: **some variables are correlated**:
+    - we would expect some variables to be correlated with each other, e.g. horse-power (i.e.  
+    `hp` and mileage per gallon (`mpg`) to be positively correlated)
+    - **we will use plots in order to see if our hypotheses could are true**
+    '''
+    st.markdown(second_working_hypo)
 
     if st.checkbox("<- Let's check box plots:"):
         boxplots = car_viz.boxplot(columns=numeric, y_max=None)
