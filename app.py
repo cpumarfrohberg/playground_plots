@@ -1,7 +1,6 @@
 #app.py
 from explore_data.visualizer import Visualizer
 from explore_data.reader import Reader
-import time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -41,11 +40,12 @@ nav = st.sidebar.radio(
 
 if nav == 'Home':
     if st.checkbox('<- For a first scan of the cars data, click here'):
-            st.write(cars.info())
+            cars_info = cars.info()
+            st.write(cars_info)
 
     multi = '''We see that only one variable is categorical/nominal ("model"),  
-    all other ones are numeric data. Of these latter, "mpg", "disp", "drat", "wt"  
-    and "qsec" are continuous. The rest are integer variables.'''
+    all other ones are numeric data. Of these latter, `mpg`, `disp`, `drat`, `wt`  
+    and `qsec` are continuous. The rest are integer variables.'''
 
     st.markdown(multi)
 
