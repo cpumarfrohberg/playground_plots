@@ -51,6 +51,7 @@ if nav == 'Home':
     and `qsec` are continuous. The rest are integer variables.'''
     st.markdown(multi)
 
+if False:
 # if nav == 'Categorical Variables':
 #     st.write('Plot and make initial inference on categorical variables.')
 #     if st.checkbox('<- Click here for example plots of categorical variables'): #TODO: implement as method
@@ -79,7 +80,7 @@ if nav == 'Numeric Variables':
         - numeric variables are normally distributed
     '''
     st.markdown(multi)
-    
+    if False:
     # if st.checkbox("<- Let's check box plots:"):
     #     boxplots = viz.boxplot(columns=lo_client_relation.columns, y_max=None) #TODO: check dataset name
     #     try:
@@ -97,26 +98,3 @@ if nav == 'Numeric Variables':
     #     try:
     #         st.pyplot(qqplot);
     #     except: 'StreamlitMethodError'
-
-# if nav == 'Plot thru time':
-#     st.write('Welcome to the section on time series.')
-
-#     if st.checkbox('<- Click here to see the daily values of bike thefts.'):
-#         bike_theft_series = churn_data.loc['2022-01-02':'2023-02-19'].resample('D').size()
-#         st.line_chart(bike_theft_series) 
-    
-#     if st.checkbox('<- Click here to see the weekly values of bike thefts.'):
-#         bike_theft_series = churn_data.loc['2022-01-02':'2023-02-19'].resample('W').size()
-#         st.line_chart(bike_theft_series) 
-
-# if nav == 'Heat Maps':
-#     st.markdown(
-#     ''' #### Welcome to the heat map page.
-#     '''
-#     )
-      
-#     if st.checkbox('Click here to see the how variables are correlated with each other (pearson).'):
-#         corr = churn_data.corr()
-#         fig, ax = plt.subplots()
-#         sns.heatmap(corr, ax=ax)
-#         st.write(fig)
