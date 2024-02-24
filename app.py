@@ -46,9 +46,8 @@ if nav == 'Home':
         info_str = buffer.getvalue()
         st.text(info_str)
 
-    multi = '''We see that only one variable is categorical/nominal ("model"),  
-    all other ones are numeric data. Of these latter, `mpg`, `disp`, `drat`, `wt`  
-    and `qsec` are continuous. The rest are integer variables.'''
+    multi = '''We see that only one variable is categorical/nominal (`model`), all other ones are numeric data.  
+    Of these latter, `mpg`, `disp`, `drat`, `wt` and `qsec` are continuous. The rest are integer variables.'''
     st.markdown(multi)
     
 if nav == 'Numeric Variables':
