@@ -19,7 +19,7 @@ Investigate potential difference between new and repeated clients.
 * build image with
 `docker build -t streamlitchurnapp:latest -f docker/Dockerfile .`
 * run image with
-`docker run -p 8501:8501 streamlitchurnapp:latest`
+`docker run --rm -p 8501:8501 --name test_streamlit_app streamlitchurnapp:latest`
 * in your web browser: map your localhost to port 8501 in container
 
 ## Next steps
