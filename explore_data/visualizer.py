@@ -1,5 +1,4 @@
 #visualizer.py
-#TODO: implement boxplots per group (minority vs majority)
 
 import pandas as pd
 import numpy as np

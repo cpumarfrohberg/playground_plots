@@ -1,5 +1,4 @@
 #app.py
-#TODO: modify data => change col names and drop unnecessary ones
 from explore_data.visualizer import Visualizer
 from explore_data.reader import Reader
 import time
@@ -8,12 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
-
-CATS = [
-    'Resident_Iquitos', 'Client_Sex', 'Client_Married', 'Client_Status_Post3Months', 
-    'LO_Active_Employee_Post3Months', 'LO_Active_Employee_Prior3Months', 
-    'LO_Active_Employee_Prior6Months', 'LO_Changed'
-    ]
 
 viz = Visualizer()
 reader = Reader()

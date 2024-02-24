@@ -1,20 +1,17 @@
 #reader.py
-"""Read, rename and reencode cols of boniversum data."""
+"""Read, rename and reencode cols of mtcars data."""
 import os
 import pandas as pd
 import numpy as np
 
-PATH = '~/data/maynas'
+url = 'https://gist.githubusercontent.com/seankross/a412dfbd88b3db70b74b/raw/5f23f993cd87c283ce766e7ac6b329ee7cc2e1d1/mtcars.csv'
 
 class Reader:
     '''Read, rename and drop cols.'''
 
-    def __init__(self, path = PATH):
-        self.path = path
-
-    def read_data(self, file: str) -> pd.DataFrame: #TODO: include drop cols option
+    def read_data(self, url: str) -> pd.DataFrame: #TODO: include drop cols option
         '''Return DataFrame with feature matrix and labels as values.'''
-        df = pd.read_csv(f'{self.path}/{file}.csv', index_col=0, parse_dates=True, encoding = 'unicode_escape')
+        df = pd.read_csv(url)
         return df
 
     def include_timestamps(self, df: pd.DataFrame) -> pd.DataFrame:
