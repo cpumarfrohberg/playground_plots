@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+from io import StringIO
 
 url = 'https://gist.githubusercontent.com/seankross/a412dfbd88b3db70b74b/raw/5f23f993cd87c283ce766e7ac6b329ee7cc2e1d1/mtcars.csv'
 
@@ -40,12 +41,14 @@ nav = st.sidebar.radio(
 
 if nav == 'Home':
     if st.checkbox('<- For a first scan of the cars data, click here'):
-            st.write(cars.info())
+        buffer = StringIO()
+        cars.info(buf=buffer)
+        info_str = buffer.getvalue()
+        st.text(info_str)
 
     multi = '''We see that only one variable is categorical/nominal ("model"),  
     all other ones are numeric data. Of these latter, `mpg`, `disp`, `drat`, `wt`  
     and `qsec` are continuous. The rest are integer variables.'''
-
     st.markdown(multi)
 
 # if nav == 'Categorical Variables':
