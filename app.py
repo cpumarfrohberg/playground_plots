@@ -30,7 +30,7 @@ numeric = cars.select_dtypes(include=['int64', 'float64'])
 st.title('Example Visual Analyis')
 
 st.markdown(
-    ''' ## This is an example on how to visualize tabular data and on how to make initial inferences.
+    ''' #### This is an example on how to visualize tabular data and on how to make initial inferences.
     '''
     )
 
@@ -41,7 +41,7 @@ nav = st.sidebar.radio(
 
 if nav == 'Home':
     if st.checkbox('<- For a first scan of the cars data, click here'):
-            st.table(cars.info())
+            st.write(cars.info())
 
     multi = '''We see that only one variable is categorical/nominal ("model"),  
     all other ones are numeric data. Of these latter, "mpg", "disp", "drat", "wt"  
