@@ -6,3 +6,4 @@ streamlit
 pydeck
 matplotlib
 seaborn
+statsmodels
