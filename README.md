@@ -3,7 +3,7 @@
 Investigate potential difference between new and repeated clients.
 
 ## Content of the project
-* 1. `explore_data` directory: implement class for data transformation and plotting
+* 1. `explore_data` directory: implement class for plotting
 * 2. `app.py`
 * 3. `requirements.txt`
 
