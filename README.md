@@ -6,7 +6,6 @@ Investigate potential difference between new and repeated clients.
 * 1. `explore_data` directory: implement class for data transformation and plotting
 * 2. `app.py`
 * 3. `requirements.txt`
-* 4. `.ipynb`: template notebooks #TODO: update
 
 ## For running the analysis in designated environment
 * clone repo locally
