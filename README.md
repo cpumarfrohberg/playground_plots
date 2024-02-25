@@ -1,6 +1,6 @@
-<h1 align="center">Compare new and repeated clients.</h1>
+<h1 align="center">Showcase plots</h1>
 <p align="center">Project Description</p>
-Investigate potential difference between new and repeated clients.
+Showcase selected plots for drawing basic conclusions on toy dataset `mtcars`.
 
 ## Content of the project
 * 1. `explore_data` directory: implement class for plotting
