@@ -1,44 +1,29 @@
-#visualizer.py
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 import statsmodels.api as sm
-#import pymc3 as pm
-import scipy.stats as stats
-#from pandas.plotting import _matplotlib
+# import plotly.express as px
+# import plotly.graph_objects as go
+# import plotly.figure_factory as ff
 
 class Visualizer:
-    '''Visualize different aspects of  data.'''
+    '''Visualize different aspects of data.'''
     def __init__(self, data: pd.DataFrame) -> None:
         self.data = data
     
     def evolution_over_time(self, column: pd.Series, y_max=None, **kwargs) -> plt.Axes:
         '''
-        Visualize the evolution over time of a col.
-        @Params:
-            - column: Name of col to visualize.
-            - y_max: Maximum value for the y-axis (optional).
-            - kwargs: Additional keyword args to pass down to
-                        plotting function.
+        Visualize the evolution over time of a column.
         '''
         ax = self.data.plot.line(y=column, **kwargs)
         if y_max is not None:
             ax.set_ylim(0, y_max)
         return ax
     
-    def boxplot(self, columns=None, y_max=None, figsize=(7, 5), **kwargs) -> sns.FacetGrid:
+    def boxplot(self, columns=None, y_max=None, figsize=(7, 5), **kwargs) -> plt.Figure:
         '''
-        Generate box plots for selected columns in a facet grid.
-        @Params:
-            - columns: List of column names to visualize (optional, defaults to all numeric columns).
-            - y_max: Maximum value for the y-axis (optional).
-            - figsize: Tuple specifying the figure size (width, height).
-            - kwargs: Additional keyword args to pass down to `sns.boxplot()`.
-        @Return:
-            - A seaborn FacetGrid.
+        Generate box plots for selected columns.
         '''
         if columns is None:
             numeric = self.data.select_dtypes(include='number')
@@ -65,27 +50,25 @@ class Visualizer:
             ax.remove()
 
         plt.tight_layout()
+        return fig
 
-    def pairplot(self, y_max=None, **kwargs) -> sns.PairGrid:
+    def pairplot(self, y_max=None, **kwargs) -> plt.Figure:
         '''
         Generate a seaborn pairplot of vars included in the initial dataset.
         @Params:
             - y_max: Maximum value for the y-axis (optional).
             - kwargs: Keyword args to pass down to `sns.pairplot()`.
         @Return:
-            - A seaborn pairplot.
+            - A matplotlib Figure object containing the pair plot.
         '''
         g = sns.pairplot(self.data, **kwargs)
         if y_max is not None:
             g.map(plt.ylim, (0, y_max))
-        return g
+        return g.fig
     
     def correlation_heatmap(self, y_max=None, **kwargs) -> plt.Axes:
         '''
         Plot the correlations between columns with a heatmap.
-        @Params:
-            - y_max: Maximum value for the y-axis (optional).
-            - kwargs: Keyword args to pass down to `sns.heatmap()`.
         '''
         corr = self.data.corr()
         mask = np.triu(np.ones_like(corr, dtype=bool))
@@ -96,7 +79,7 @@ class Visualizer:
             corr, 
             mask=mask, 
             cmap=cmap, 
-            vmax=y_max if y_max is not None else 0.3,  # Set the maximum value for the color scale 
+            vmax=y_max if y_max is not None else 0.3, 
             center=0,
             square=True, 
             linewidths=.5, 
@@ -105,50 +88,62 @@ class Visualizer:
         )
         plt.title('Correlation')
         plt.tight_layout()
-        plt.show()
+        return f
 
-    def qq_plot(self, column: pd.Series, **kwargs):
+    def qq_plot(self, column_name: str, **kwargs) -> plt.Figure:
         '''
         Generate a Quantile-Quantile (Q-Q) plot for a selected column.
         @Params:
-            - column: The column to visualize.
+            - column_name: The name of the column to visualize.
             - kwargs: Additional keyword args to pass down to plotting function.
         '''
-        sm.qqplot(column, line='s', **kwargs)
-        plt.xlabel('Theoretical Quantiles')
-        plt.ylabel('Sample Quantiles')
-        plt.title(f'Q-Q Plot for {column.name}')
-        plt.show()
+        try:
+            column = self.data[column_name]
+            fig, ax = plt.subplots()
+            sm.qqplot(column, line='s', ax=ax, **kwargs)
+            ax.set_xlabel('Theoretical Quantiles')
+            ax.set_ylabel('Sample Quantiles')
+            ax.set_title(f'Q-Q Plot for {column_name}')
+            plt.close(fig)  # Close the figure to prevent it from being displayed twice
+            return fig
+        except KeyError:
+            print(f"Error: '{column_name}' is not a valid column name in the dataset.")
+            return None
 
-    def distribution_col(self, column: pd.Series, y_max=None, **kwargs) -> sns.displot:
+    def distribution_col(self, column_name: str, y_max=None, **kwargs) -> plt.Figure:
         '''
         Generate a seaborn displot for a selected column.
         @Params:
-            - column: The column to visualize.
+            - column_name: The name of the column to visualize.
             - y_max: Maximum value for the y-axis (optional).
-            - kwargs: Keyword args to pass down to `sns.displot()`.
+            - kwargs: Additional keyword args to pass down to sns.displot().
         '''
-        g = sns.displot(
-            data=self.data,
-            x=column,
-            kde=True,
-            aspect=2.5,
-            height=3.5,
-            alpha=0.5,
-            **kwargs
-        )
-        if y_max is not None:
-            g.set(ylim=(0, y_max))
-        plt.title(f'Distribution of {column.name}')
-        plt.tight_layout()
-        plt.show()
+        try:
+            column = self.data[column_name]
+            fig = sns.displot(
+                data=self.data,
+                x=column,
+                kde=True,
+                aspect=2.5,
+                height=3.5,
+                alpha=0.5,
+                **kwargs
+            )
+            if y_max is not None:
+                fig.set(ylim=(0, y_max))
+            plt.title(f'Distribution of {column_name}')
+            plt.tight_layout()
+            return fig
+        except KeyError:
+            print(f"Error: '{column_name}' is not a valid column name in the dataset.")
+            return None
+        except TypeError:
+            print("Error: Please provide a valid column name.")
+            return None
 
     def distribution_grid(self, y_max=None, **kwargs) -> plt.Axes:
         '''
         Generate seaborn displots for all numeric columns.
-        @Params:
-            - y_max: Maximum value for the y-axis (optional).
-            - kwargs: Keyword args to pass down to `sns.displot()`.
         '''
         numeric = self.data.select_dtypes(include='number')
         g = numeric.hist(
@@ -160,28 +155,81 @@ class Visualizer:
             for ax in g.flatten():
                 ax.set_ylim(0, y_max)
         return g
+
+# class Visualizer:
+#     '''Visualize different aspects of data.'''
+#     def __init__(self, data: pd.DataFrame) -> None:
+#         self.data = data
     
-    # def qq_plot_custom_distribution(self, data_column: pd.Series, pymc3_distribution, **kwargs):
-    #     '''
-    #     Generate a Q-Q plot for a specified PyMC3 distribution.
-    #     @Params:
-    #         - data_column: The column of your data to visualize.
-    #         - pymc3_distribution: A PyMC3 distribution object representing the chosen distribution.
-    #         - kwargs: Additional keyword args to pass to the plt.scatter function.
-    #     '''
-    #     with pm.Model() as model:
-    #         # Create a custom random variable using the PyMC3 distribution
-    #         rv = pymc3_distribution('rv', **kwargs)
-    #         likelihood = pm.Normal('likelihood', mu=rv, sd=1, observed=data_column)
-        
-    #     with model:
-    #         trace = pm.sample(1000, tune=1000)
-        
-    #     # Extract posterior samples
-    #     samples = trace['rv']
-        
-    #     # Generate Q-Q plot
-    #     stats.probplot(samples, dist=stats.norm, plot=plt)
-    #     plt.title(f'Q-Q Plot for {pymc3_distribution.__name__} Distribution')
-    #     plt.show()
+#     def evolution_over_time(self, column: pd.Series, y_max=None, **kwargs) -> go.Figure:
+#         '''
+#         Visualize the evolution over time of a column.
+#         '''
+#         fig = px.line(self.data, y=column, **kwargs)
+#         if y_max is not None:
+#             fig.update_yaxes(range=[0, y_max])
+#         return fig
     
+#     def boxplot(self, columns=None, y_max=None, **kwargs) -> go.Figure:
+#         '''
+#         Generate box plots for selected columns.
+#         '''
+#         if columns is None:
+#             numeric = self.data.select_dtypes(include='number')
+#         else:
+#             numeric = self.data[columns]
+
+#         fig = go.Figure()
+#         for col in numeric.columns:
+#             fig.add_trace(go.Box(y=numeric[col], name=col, **kwargs))
+#         if y_max is not None:
+#             fig.update_yaxes(range=[0, y_max])
+#         return fig
+
+#     def pairplot(self, y_max=None, **kwargs) -> go.Figure:
+#         '''
+#         Generate a seaborn pairplot of vars included in the initial dataset.
+#         '''
+#         fig = px.scatter_matrix(self.data, **kwargs)
+#         if y_max is not None:
+#             for i in range(len(fig.layout.annotations)):
+#                 fig.layout.annotations[i].text = f'x{i+1}, y{i+1}'
+#             fig.update_layout(yaxis=dict(range=[0, y_max]))
+#         return fig
+    
+#     def correlation_heatmap(self, y_max=None, **kwargs) -> go.Figure:
+#         '''
+#         Plot the correlations between columns with a heatmap.
+#         '''
+#         corr = self.data.corr()
+#         fig = ff.create_annotated_heatmap(z=corr.values, x=corr.index.tolist(), y=corr.columns.tolist())
+#         if y_max is not None:
+#             fig.update_layout(coloraxis_colorbar=dict(range=[0, y_max]))
+#         return fig
+
+#     def qq_plot(self, column: pd.Series, **kwargs) -> go.Figure:
+#         '''
+#         Generate a Quantile-Quantile (Q-Q) plot for a selected column.
+#         '''
+#         fig = px.scatter(x=sm.ProbPlot(column).theoretical_quantiles, y=sm.ProbPlot(column).sample_quantiles, **kwargs)
+#         fig.update_layout(title=f'Q-Q Plot for {column.name}')
+#         return fig
+
+#     def distribution_col(self, column: pd.Series, y_max=None, **kwargs) -> go.Figure:
+#         '''
+#         Generate a seaborn displot for a selected column.
+#         '''
+#         fig = ff.create_distplot([self.data[column]], group_labels=[column.name], **kwargs)
+#         if y_max is not None:
+#             fig.update_layout(yaxis=dict(range=[0, y_max]))
+#         return fig
+
+#     def distribution_grid(self, y_max=None, **kwargs) -> go.Figure:
+#         '''
+#         Generate seaborn displots for all numeric columns.
+#         '''
+#         numeric = self.data.select_dtypes(include='number')
+#         fig = ff.create_distplot([numeric[col] for col in numeric.columns], group_labels=numeric.columns.tolist(), **kwargs)
+#         if y_max is not None:
+#             fig.update_layout(yaxis=dict(range=[0, y_max]))
+#         return fig
