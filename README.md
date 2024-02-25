@@ -11,7 +11,7 @@ Investigate potential difference between new and repeated clients.
 ## For running the analysis in designated environment
 * clone repo locally
 * run `transform.py`for transforming data and using transformed data for example dashboard
-* create an environment with the contents of the requirements.txt file (if you are using conda: install pip first (e.g. via `conda install pip` and then `pip install -r requirements.txt`)
+* create an environment with the contents of the `requirements.txt` file; if you are using conda: install pip first (e.g. via `conda install pip` and then `pip install -r requirements.txt`)
 * run `streamlit run app.py` for seeing an example dashboard for the analysis.
 
 ## For running the app in a docker container
@@ -22,8 +22,14 @@ Investigate potential difference between new and repeated clients.
 `docker run --rm -p 8501:8501 --name test_streamlit_app streamlitchurnapp:latest`
 * in your web browser: map your localhost to port 8501 in container
 
+## For running on your browser/yur phone
+* hit this url https://firstry.streamlit.app/
+
+
 ## Next steps
-* [ ] 
+* [plot correlations] 
+* [plots for categorical data] 
+* [run statistical tests to complement first conclusions based on plots] 
 
 ## Author
 **Carlos Pumar-Frohberg**
