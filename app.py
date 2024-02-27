@@ -54,7 +54,7 @@ if nav == 'Numeric Variables':
     
         first_working_hypo = '''
         * First working hypothesis: **variables are normally distributed**. 
-            - However, when comparing mean and median values in the summary stats, we note that this might not be the case (e.g., `disp`, but also `hp`...and other ones - can you spot which ones?)
+            - however, when comparing mean and median values in the summary stats, we note that this might not be the case (e.g., `disp`, but also `hp`...and other ones - can you spot which ones?)
             - in fact, by comparing named values with each other, we expect that either the data-generating process (DGP) is non-normal or that we have outliers.
             - in addition, and by comparing the first and third quartiles with the median, we can check if our variables are left (`disp`) or right-skewed (e.g., `hp`)
             - **we will use plots to see if our hypotheses hold**
@@ -87,7 +87,9 @@ if nav == 'Numeric Variables':
         st.write(pairplot)
     
         interpret_pairplot = '''
-        * Re first working hypothesis: **we cannot be sure that any of the variables are normally distributed**
+        * Re first working hypothesis: **we cannot be sure that **any of the variables** are normally distributed**
+            - plots indicate rather existence of other DGP (e.g. `poisson`-processes and/or any right-skewed distribution and even `uniform`-distributions) 
+            - by looking at the histograms, we notice that only vars of type `float64` can reasonably be interpreted: `int64`-types produce distorted histograms by duplicated counts of individual vals (e.g. for `cyl` variable)
             - in addition, we can see that some variables seem to be correlated one with the other
             - **we will need to user additional plots and/or run statistical tests in order to see if our second hypothesis holds**
         '''
