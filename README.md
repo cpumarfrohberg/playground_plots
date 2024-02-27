@@ -22,7 +22,7 @@ Showcase selected plots for drawing initial conclusions on toy dataset `mtcars`.
 * in your web browser: map your localhost to port 8501 in container
 
 ## For running on your browser/yur phone
-* hit this url https://firstrai.streamlit.app/
+* hit this url https://firstry.streamlit.app
 
 
 ## Next steps

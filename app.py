@@ -90,6 +90,16 @@ if nav == 'Numeric Variables':
             - **we will need to user additional plots and/or run statistical tests in order to see if our second hypothesis holds**
         '''
         st.markdown(interpret_pairplot)
+    
+    if st.checkbox('<- Click here for plotting correlation heat map'):
+        corr_heatmap = car_viz.correlation_heatmap()
+        st.pyplot(corr_heatmap)
+
+        interpret_corr_heatmap = '''
+        * Re corrrelation: 
+            
+        '''
+        st.markdown(interpret_corr_heatmap)
 
     if st.checkbox('<- Click here for checking QQ plots (assumption: vars are normally distributed)'):
         column_name = st.selectbox('Select a column:', numeric.columns.tolist())
