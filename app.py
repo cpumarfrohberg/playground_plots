@@ -90,7 +90,7 @@ if nav == 'Numeric Variables':
         * Re first working hypothesis: **we cannot be sure that **any of the variables** are normally distributed**
             - plots indicate rather existence of other DGP (e.g. `poisson`-processes and/or any right-skewed distribution and even `uniform`-distributions) 
             - by looking at the histograms, we notice that only vars of type `float64` can reasonably be interpreted: `int64`-types produce distorted histograms by duplicated counts of individual vals (e.g. for `cyl` variable)
-            - in addition, we can see that some variables seem to be correlated one with the other
+            - in addition, we can see that some variables seem to be correlated one with the other, mainly negatively (!)
             - **we will need to user additional plots and/or run statistical tests in order to see if our second hypothesis holds**
         '''
         st.markdown(interpret_pairplot)
