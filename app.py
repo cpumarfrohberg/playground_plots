@@ -39,11 +39,11 @@ if nav == 'Home':
         st.text(info_str)
 
     multi = '''
-    We see that 
-        * only one variable is categorical/nominal (`model`), all other ones are numeric data
-        * of the latter, `mpg`, `disp`, `drat`, `wt`, and `qsec` are continuous. The rest are integer variables.
-        * there's no missing data
-        * sample size is relatively small (additional challenge for running significance tests)
+    * We see that 
+        - only one variable is categorical/nominal (`model`), all other ones are numeric data
+        - of the latter, `mpg`, `disp`, `drat`, `wt`, and `qsec` are continuous. The rest are integer variables.
+        - there's no missing data
+        - sample size is relatively small (additional challenge for running significance tests)
     '''
     st.markdown(multi)
     
