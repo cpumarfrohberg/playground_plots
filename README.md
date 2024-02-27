@@ -26,7 +26,6 @@ Showcase selected plots for drawing initial conclusions on toy dataset `mtcars`.
 
 
 ## Next steps
-* [ ] plot correlations
 * [ ] plots for categorical data
 * [ ] run statistical tests to complement first conclusions based on plots
 
