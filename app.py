@@ -18,8 +18,8 @@ def instantiate_visualizer(data):
 
 cars = load_data()
 car_viz = instantiate_visualizer(cars)
-
 numeric = cars.select_dtypes(include=['int64', 'float64'])
+car_viz_numeric = instantiate_visualizer(numeric)
 
 st.title('Example Visual Analysis')
 
@@ -92,7 +92,7 @@ if nav == 'Numeric Variables':
         st.markdown(interpret_pairplot)
     
     if st.checkbox('<- Click here for plotting correlation heat map'):
-        corr_heatmap = car_viz.correlation_heatmap()
+        corr_heatmap = car_viz_numeric.correlation_heatmap()
         st.pyplot(corr_heatmap)
 
         interpret_corr_heatmap = '''
