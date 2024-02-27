@@ -72,7 +72,7 @@ if nav == 'Numeric Variables':
 
         interpret_boxplots = '''
         * Re first working hypothesis: 
-            - ** only *one* variable seems to be normally distributed: `cyl`**
+            - **only *one* variable seems to be normally distributed: `cyl`**
             - also, all other variables are either left or right-skewed
             - additionally, we see that for `mpg`, `hp`, `qsec`, `carb` and `wt`, we either might have outliers or we are looking into a non-normal DGP
                 - this indicates we should expand our analysis to an analysis of correlation (since we could simply have non-normal distributions and "outliers" actually are not outliers, but simply follow a non-normal distribution)
