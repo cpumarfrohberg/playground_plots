@@ -9,7 +9,6 @@ Showcase selected plots for drawing initial conclusions on toy dataset `mtcars`.
 
 ## For running the analysis in designated environment
 * clone repo locally
-* run `transform.py`for transforming data and using transformed data for example dashboard
 * create an environment with the contents of the `requirements.txt` file; if you are using conda: install pip first (e.g. via `conda install pip` and then `pip install -r requirements.txt`)
 * run `streamlit run app.py` for seeing an example dashboard for the analysis.
 
