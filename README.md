@@ -1,9 +1,9 @@
 <h1 align="center">Showcase plots</h1>
 <p align="center">Project Description</p>
-Showcase selected plots for drawing basic conclusions on toy dataset `mtcars`.
+Showcase selected plots for drawing initial conclusions on toy dataset `mtcars`.
 
 ## Content of the project
-* 1. `explore_data` directory: implement class for plotting
+* 1. `explore_data` directory: implement class for reading data and plotting
 * 2. `app.py`
 * 3. `requirements.txt`
 
@@ -22,7 +22,7 @@ Showcase selected plots for drawing basic conclusions on toy dataset `mtcars`.
 * in your web browser: map your localhost to port 8501 in container
 
 ## For running on your browser/yur phone
-* hit this url https://firstry.streamlit.app/
+* hit this url https://firstrai.streamlit.app/
 
 
 ## Next steps
