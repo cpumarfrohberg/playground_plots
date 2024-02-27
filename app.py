@@ -56,7 +56,8 @@ if nav == 'Numeric Variables':
         '''
         st.markdown(first_working_hypo)
         
-        second_working_hypo = '''* Second working hypothesis: **some variables are correlated**:
+        second_working_hypo = '''
+        * Second working hypothesis: **some variables are correlated**:
             - we would expect some variables to be correlated with each other, e.g., horsepower (i.e.,  
             `hp` and mileage per gallon (`mpg`) to be positively correlated)
             - **we will use plots to see if our hypotheses holds**
@@ -67,7 +68,8 @@ if nav == 'Numeric Variables':
         boxplots = car_viz.boxplot(columns=numeric.columns, y_max=None)
         st.pyplot(boxplots)
 
-        interpret_boxplots = '''* Re first working hypothesis: **only one variable seems to be normally distributed:`cyl`**
+        interpret_boxplots = '''
+        * Re first working hypothesis: **only one variable seems to be normally distributed:`cyl`**
             - boxplots show that all other variables are either left or right-skewed
             - also, we see that for `mpg`, `hp`, `qsec`, `carb` and `wt`, we either might have outliers or we are looking into a non-normal DGP
             - we will **need to use additional plots and/or run statistical tests in order to see if our hypotheses could be true**
@@ -78,7 +80,8 @@ if nav == 'Numeric Variables':
         pairplot = car_viz.pairplot()
         st.write(pairplot)
     
-        interpret_pairplot = '''* Re first working hypothesis: **we cannot be sure that any of the variables are normally distributed**
+        interpret_pairplot = '''
+        * Re first working hypothesis: **we cannot be sure that any of the variables are normally distributed**
             - in addition, we can see that some variables seem to be correlated one with the other; hence, it would be interesting to additionally plot the degree of correlation between selected pairs of vars
             - **we will need to user additional plots and/or run statistical tests in order to see if our second  
             hypothesis holds**
@@ -90,7 +93,8 @@ if nav == 'Numeric Variables':
         qqplot = car_viz.qq_plot(column_name)
         st.pyplot(qqplot)
 
-        interpret_qqplot = '''* Re first working hypothesis: **we cannot be sure that any of the variables are normally distributed**
+        interpret_qqplot = '''
+        * Re first working hypothesis: **we cannot be sure that any of the variables are normally distributed**
             - rather, we see that only `mpg` seems to comply to this assumption (since most of the datapoints lie on the line of of the theoretical quantiles)
             - at the same time, the datapoints which are relatively far from the line indicate either the existence of tails or of outliers, which requires additional analysis
             - finally, we see that the integer variables (e.g. `cyl`) require additional tests in order to check for normality (horizontal lines are due to duplicated values, which result from identical decimal values)
