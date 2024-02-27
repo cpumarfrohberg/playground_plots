@@ -96,8 +96,11 @@ if nav == 'Numeric Variables':
         st.pyplot(corr_heatmap)
 
         interpret_corr_heatmap = '''
-        * Re corrrelation: 
-            
+        * Re corrrelation: relatively strong negative correlation between selected vars, while positive correlations rather weak
+            - in addition: as we expected, `hp` and `mpg` are correlated with each other but **negatively** so (`rho` ~ -0.8 )
+                - in fact `mpg` is the variable which correlates with the greatest amount of other vars; this could be a hint of multicolinearity, which would imply thinking about  
+                what to do with that var in the context of machine learning (e.g. linear regression with `mpg` being the dependent variable)
+            - also, and with regards to weaker correlations between the other vars: we should run additional tests in order to test for statistical significance
         '''
         st.markdown(interpret_corr_heatmap)
 
