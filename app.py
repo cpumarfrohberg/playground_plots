@@ -47,7 +47,8 @@ if nav == 'Numeric Variables':
     if st.checkbox('<- Click here for inspecting summary stats'):
         st.table(cars.describe())
     
-        first_working_hypo = '''* First working hypothesis: **variables are normally distributed**. However:
+        first_working_hypo = '''
+        * First working hypothesis: **variables are normally distributed**. However:
             - comparing mean and median values, we note that this might not be the case (e.g., `disp`, but also `hp`...and other ones - can you spot which ones?)
             - in fact, by comparing mean and median values, we can already say that either the data-generating processes (DGP) are non-uniform or that we have outliers.
             - in addition, and by comparing the first and third quartiles with the median, we can check if our variables are left (`disp`) or right-skewed (e.g., `hp`)
