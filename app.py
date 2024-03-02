@@ -2,6 +2,11 @@ from explore_data.visualizer import Visualizer
 from explore_data.reader import Reader
 import streamlit as st
 from io import StringIO
+import numpy as np
+import plotly.graph_objs as go
+from scipy.stats import norm
+
+
 
 url = 'https://gist.githubusercontent.com/seankross/a412dfbd88b3db70b74b/raw/5f23f993cd87c283ce766e7ac6b329ee7cc2e1d1/mtcars.csv'
 
@@ -25,7 +30,7 @@ st.title('Example Visual Analysis')
 
 nav = st.sidebar.radio(
     'Please choose one of the following:',
-    ['Home', 'Numeric Variables', 'Categorical Variables']
+    ['Home', 'Numeric Variables', 'Categorical Variables', 'Distributions']
     ) 
 
 if nav == 'Home':
@@ -122,3 +127,28 @@ if nav == 'Numeric Variables':
             hypothesis holds**
         '''
         st.markdown(interpret_qqplot)
+    
+
+if nav == 'Distributions':
+
+    st.title('Normal Distribution')
+
+    mu = st.sidebar.number_input('μ', value=0)
+    sd = st.sidebar.number_input('σ', value=1)
+    show_z = st.sidebar.radio('Show Z?', ('Yes', 'No'))
+
+    x = np.linspace(mu - (4 * sd), mu + (4 * sd), 1001)
+    y = norm.pdf(x, mu, sd)
+
+    if show_z == 'Yes':
+        zx = [mu - (3 * sd), mu - (2 * sd), mu - sd, mu + sd, mu + (2 * sd), mu + (3 * sd)]
+        zy = norm.pdf(zx, mu, sd)
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Normal Distribution'))
+        fig.add_trace(go.Bar(x=zx, y=zy, width=[0.02]*6, text=['Z=-3', 'Z=-2', 'Z=-1', 'Z=1', 'Z=2', 'Z=3'], name='Z Values'))
+    else:
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Normal Distribution'))
+
+    st.plotly_chart(fig)
