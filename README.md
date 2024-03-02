@@ -23,7 +23,6 @@ Showcase selected plots for drawing initial conclusions on toy dataset `mtcars`.
 ## For running on your browser/yur phone
 * hit this url https://firstry.streamlit.app
 
-
 ## Next steps
 * [ ] plots for categorical data
 * [ ] make all plots `plotly`
