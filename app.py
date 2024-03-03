@@ -30,7 +30,7 @@ st.title('Example Visual Analysis')
 
 nav = st.sidebar.radio(
     'Please choose one of the following:',
-    ['Home', 'Numeric Variables', 'Categorical Variables', 'Distributions']
+    ['Home', 'Numeric Variables', 'Categorical Variables']
     ) 
 
 if nav == 'Home':
