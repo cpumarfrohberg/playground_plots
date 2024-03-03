@@ -110,28 +110,25 @@ class Visualizer:
             print(f"Error: '{column_name}' is not a valid column name in the dataset.")
             return None
 
-    def distribution_col(self, column_name: str, y_max=None, **kwargs) -> plt.Figure:
+    def distribution_col(self, column_name: str, bin_size: int = 10, y_max=None, **kwargs) -> plt.Figure:
         '''
         Generate a seaborn displot for a selected column.
         @Params:
             - column_name: The name of the column to visualize.
+            - bin_size: The size of bins for histogram.
             - y_max: Maximum value for the y-axis (optional).
             - kwargs: Additional keyword args to pass down to sns.displot().
         '''
         try:
             column = self.data[column_name]
-            fig = sns.displot(
-                data=self.data,
-                x=column,
-                kde=True,
-                aspect=2.5,
-                height=3.5,
-                alpha=0.5,
-                **kwargs
-            )
-            if y_max is not None:
-                fig.set(ylim=(0, y_max))
+            fig = plt.figure(figsize=(8, 6))
+            sns.histplot(column, bins=bin_size, **kwargs)
             plt.title(f'Distribution of {column_name}')
+            plt.xlabel(column_name)
+            plt.ylabel('Frequency')
+            plt.grid(True)
+            if y_max is not None:
+                plt.ylim(0, y_max)
             plt.tight_layout()
             return fig
         except KeyError:
@@ -155,81 +152,3 @@ class Visualizer:
             for ax in g.flatten():
                 ax.set_ylim(0, y_max)
         return g
-
-# class Visualizer:
-#     '''Visualize different aspects of data.'''
-#     def __init__(self, data: pd.DataFrame) -> None:
-#         self.data = data
-    
-#     def evolution_over_time(self, column: pd.Series, y_max=None, **kwargs) -> go.Figure:
-#         '''
-#         Visualize the evolution over time of a column.
-#         '''
-#         fig = px.line(self.data, y=column, **kwargs)
-#         if y_max is not None:
-#             fig.update_yaxes(range=[0, y_max])
-#         return fig
-    
-#     def boxplot(self, columns=None, y_max=None, **kwargs) -> go.Figure:
-#         '''
-#         Generate box plots for selected columns.
-#         '''
-#         if columns is None:
-#             numeric = self.data.select_dtypes(include='number')
-#         else:
-#             numeric = self.data[columns]
-
-#         fig = go.Figure()
-#         for col in numeric.columns:
-#             fig.add_trace(go.Box(y=numeric[col], name=col, **kwargs))
-#         if y_max is not None:
-#             fig.update_yaxes(range=[0, y_max])
-#         return fig
-
-#     def pairplot(self, y_max=None, **kwargs) -> go.Figure:
-#         '''
-#         Generate a seaborn pairplot of vars included in the initial dataset.
-#         '''
-#         fig = px.scatter_matrix(self.data, **kwargs)
-#         if y_max is not None:
-#             for i in range(len(fig.layout.annotations)):
-#                 fig.layout.annotations[i].text = f'x{i+1}, y{i+1}'
-#             fig.update_layout(yaxis=dict(range=[0, y_max]))
-#         return fig
-    
-#     def correlation_heatmap(self, y_max=None, **kwargs) -> go.Figure:
-#         '''
-#         Plot the correlations between columns with a heatmap.
-#         '''
-#         corr = self.data.corr()
-#         fig = ff.create_annotated_heatmap(z=corr.values, x=corr.index.tolist(), y=corr.columns.tolist())
-#         if y_max is not None:
-#             fig.update_layout(coloraxis_colorbar=dict(range=[0, y_max]))
-#         return fig
-
-#     def qq_plot(self, column: pd.Series, **kwargs) -> go.Figure:
-#         '''
-#         Generate a Quantile-Quantile (Q-Q) plot for a selected column.
-#         '''
-#         fig = px.scatter(x=sm.ProbPlot(column).theoretical_quantiles, y=sm.ProbPlot(column).sample_quantiles, **kwargs)
-#         fig.update_layout(title=f'Q-Q Plot for {column.name}')
-#         return fig
-
-#     def distribution_col(self, column: pd.Series, y_max=None, **kwargs) -> go.Figure:
-#         '''
-#         Generate a seaborn displot for a selected column.
-#         '''
-#         fig = ff.create_distplot([self.data[column]], group_labels=[column.name], **kwargs)
-#         if y_max is not None:
-#             fig.update_layout(yaxis=dict(range=[0, y_max]))
-#         return fig
-
-#     def distribution_grid(self, y_max=None, **kwargs) -> go.Figure:
-#         '''
-#         Generate seaborn displots for all numeric columns.
-#         '''
-#         numeric = self.data.select_dtypes(include='number')
-#         fig = ff.create_distplot([numeric[col] for col in numeric.columns], group_labels=numeric.columns.tolist(), **kwargs)
-#         if y_max is not None:
-#             fig.update_layout(yaxis=dict(range=[0, y_max]))
-#         return fig

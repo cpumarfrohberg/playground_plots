@@ -92,14 +92,26 @@ if nav == 'Numeric Variables':
         st.write(pairplot)
     
         interpret_pairplot = '''
-        * Re first working hypothesis: **we cannot be sure that **any of the variables** are normally distributed**
-            - plots indicate rather existence of other DGP (e.g. `poisson`-processes and/or any right-skewed distribution and even `uniform`-distributions) 
-            - by looking at the histograms, we notice that only vars of type `float64` can reasonably be interpreted: `int64`-types produce distorted histograms by duplicated counts of individual vals (e.g. for `cyl` variable)
-            - in addition, we can see that some variables seem to be correlated one with the other, mainly negatively (!)
+        * Re first working hypothesis: **by inspecting the histograms of the numeric data, we cannot be sure that **any of the variables** are normally distributed**
+            - by looking at the histograms, we notice that
+                - histograms are not helpful for `int64` column types produce distorted histograms given the duplicated counts of individual vals (e.g. for `cyl` variable)
+                - histograms for `float64` column types don't resemble a normal distribution; this is true also for different bin sizes (convince yourself of this below in next section)
+            - in addition, we can see that some variables seem to be correlated one with the other, mainly negatively so (!)
             - **we will need to user additional plots and/or run statistical tests in order to see if our second hypothesis holds**
         '''
         st.markdown(interpret_pairplot)
-    
+
+        with st.expander('Investigate here how histograms of continous data changes for varying bin sizes:'):
+            column_name = st.selectbox('Select a column:', numeric.columns[numeric.dtypes == 'float64'])
+            bin_size = st.slider('Select bin size:', min_value=1, max_value=50, value=10)
+            distribution_continuous = car_viz.distribution_col(column_name, bin_size=bin_size)
+            st.pyplot(distribution_continuous)
+
+            interpret_distribution_plots = '''
+            * we can conclude that even after varying bin sizes, continous data does not seem to follow a normal distribution.
+            '''
+            st.markdown(interpret_distribution_plots)
+
     if st.checkbox('<- Click here for plotting correlation heat map'):
         corr_heatmap = car_viz_numeric.correlation_heatmap()
         st.pyplot(corr_heatmap)
@@ -113,7 +125,7 @@ if nav == 'Numeric Variables':
         '''
         st.markdown(interpret_corr_heatmap)
 
-    if st.checkbox('<- Click here for checking QQ plots (assumption: vars are normally distributed)'):
+    if st.checkbox('<- Click here for checking QQ plots'):
         column_name = st.selectbox('Select a column:', numeric.columns.tolist())
         qqplot = car_viz.qq_plot(column_name)
         st.pyplot(qqplot)
