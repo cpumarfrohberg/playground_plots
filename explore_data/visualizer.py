@@ -137,18 +137,43 @@ class Visualizer:
         except TypeError:
             print("Error: Please provide a valid column name.")
             return None
-
-    def distribution_grid(self, y_max=None, **kwargs) -> plt.Axes:
+    
+    def barplot(self, column_name: str, y_max=None, x_tick_rotation=60, **kwargs) -> plt.Figure:
         '''
-        Generate seaborn displots for all numeric columns.
+        Generate a barplot for a selected column.
+        @Params:
+            - column_name: The name of the column to visualize.
+            - y_max: Maximum value for the y-axis (optional).
+            - x_tick_rotation: Rotation angle for x-axis ticks (optional, default is 90).
+            - kwargs: Additional keyword args to pass down to sns.barplot().
         '''
-        numeric = self.data.select_dtypes(include='number')
-        g = numeric.hist(
-            figsize=(15, 10),
-            alpha=0.5,
-            **kwargs
-        )
-        if y_max is not None:
-            for ax in g.flatten():
+        try:
+            column = self.data[column_name]
+            grouped_data = self.data.groupby(column_name).size().reset_index(name='count')
+            
+            fig, ax = plt.subplots(figsize=(8, 6))
+            sns.barplot(x=column_name, y='count', data=grouped_data, **kwargs)
+            
+            ax.set_title(f'Barplot of {column_name}')
+            ax.set_xlabel(column_name)
+            ax.set_ylabel('Count')
+            ax.grid(True)
+            
+            if y_max is not None:
                 ax.set_ylim(0, y_max)
-        return g
+            
+            plt.xticks(rotation=x_tick_rotation)  # Rotate x-axis ticks
+            
+            plt.tight_layout()
+            return fig
+        except KeyError:
+            print(f"Error: '{column_name}' is not a valid column name in the dataset.")
+            return None
+        except TypeError:
+            print("Error: Please provide a valid column name.")
+            return None
+
+
+
+
+        

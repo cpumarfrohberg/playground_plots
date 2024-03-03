@@ -3,7 +3,7 @@ from explore_data.reader import Reader
 import streamlit as st
 from io import StringIO
 import numpy as np
-import plotly.graph_objs as go
+import matplotlib.pyplot as plt
 from scipy.stats import norm
 
 
@@ -24,6 +24,7 @@ def instantiate_visualizer(data):
 cars = load_data()
 car_viz = instantiate_visualizer(cars)
 numeric = cars.select_dtypes(include=['int64', 'float64'])
+cats = cars.select_dtypes(include=['object'])
 car_viz_numeric = instantiate_visualizer(numeric)
 
 st.title('Example Visual Analysis')
@@ -139,3 +140,16 @@ if nav == 'Numeric Variables':
             - also, and with regards to weaker correlations between the other vars: we should run additional tests in order to test for statistical significance
         '''
         st.markdown(interpret_corr_heatmap)
+
+if nav == 'Categorical Variables':
+    st.write('Create plots for inspecting categorical/nominal variables.')
+
+    if st.checkbox('<- Click here for inspecting barplots'):
+        column_name = st.selectbox('Select a column:', cats.columns.tolist())
+        barplots = car_viz.barplot(column_name)
+        st.pyplot(barplots)
+
+        interpret_cats_plot = '''
+        * Clearly, there's an issue with the way the data has been gathered: the aggregated values of the `model`-column returns the constant `1`.
+        '''
+        st.markdown(interpret_cats_plot)
