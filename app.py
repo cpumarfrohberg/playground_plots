@@ -31,7 +31,7 @@ st.title('Example Visual Analysis')
 
 nav = st.sidebar.radio(
     'Please choose one of the following:',
-    ['Home', 'Numeric Variables', 'Categorical Variables']
+    ['Home', 'Numeric Variables', 'Categorical Variables', 'Statistical Tests']
     ) 
 
 if nav == 'Home':
@@ -153,3 +153,14 @@ if nav == 'Categorical Variables':
         * Clearly, there's an issue with the way the data has been gathered: the aggregated values of the `model`-column returns the constant `1`.
         '''
         st.markdown(interpret_cats_plot)
+
+# if nav == 'Statistical Tests':
+#     st.write('Run statistical tests to compare them with the conclusions drawn re dataset based on prior plots.')
+#     if st.checkbox('<- Click here for checking if any of the vars have outliers:'):
+#         with st.expander('Investigate here if "extraordinary" values are actually outliers based on Grubbs Test:'):
+#             column_name = st.selectbox('Select a column:', numeric.columns[numeric.dtypes == 'float64'])
+#             outlier_indices = grubbs.test(column_name)
+#             if len(outlier_indices) > 0:
+#                 st.write("Outliers detected at indices:", outlier_indices)
+#             else:
+#                 st.write("No outliers detected.")
