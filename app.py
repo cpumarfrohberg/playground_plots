@@ -154,10 +154,10 @@ if nav == 'Categorical Variables':
         '''
         st.markdown(interpret_cats_plot)
 
-# if nav == 'Statistical Tests':
+# if nav == 'Statistical Tests': #TODO: use this in order to detect existence of outliers: https://pyod.readthedocs.io/en/latest/example.html
 #     st.write('Run statistical tests to compare them with the conclusions drawn re dataset based on prior plots.')
 #     if st.checkbox('<- Click here for checking if any of the vars have outliers:'):
-#         with st.expander('Investigate here if "extraordinary" values are actually outliers based on Grubbs Test:'):
+#         with st.expander('Investigate here if values are actually outliers based on Grubbs Test:'):
 #             column_name = st.selectbox('Select a column:', numeric.columns[numeric.dtypes == 'float64'])
 #             outlier_indices = grubbs.test(column_name)
 #             if len(outlier_indices) > 0:
